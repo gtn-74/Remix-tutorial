@@ -1,10 +1,19 @@
+import { LinksFunction } from "@remix-run/node";
 import {
   Form,
   Links,
   Meta,
+  Outlet,
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+
+// fromの「?url」がよくわからん
+import appStylesHref from "./app.css?url";
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: appStylesHref },
+];
 
 export default function App() {
   return (
@@ -13,6 +22,7 @@ export default function App() {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
+        {/* このLinksは、なんだ */}
         <Links />
       </head>
       <body>
@@ -36,6 +46,7 @@ export default function App() {
           <nav>
             <ul>
               <li>
+                {/* 親コンポーネント的な */}
                 <a href={`/contacts/1`}>Your Name</a>
               </li>
               <li>
@@ -44,7 +55,9 @@ export default function App() {
             </ul>
           </nav>
         </div>
-
+        <div id="detail">
+          <Outlet />
+        </div>
         <ScrollRestoration />
         <Scripts />
       </body>
