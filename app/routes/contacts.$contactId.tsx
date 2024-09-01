@@ -1,22 +1,37 @@
-import { Form } from "@remix-run/react";
-import type { FunctionComponent } from "react";
-
-import type { ContactRecord } from "../data";
+import { json, LoaderFunctionArgs } from "@remix-run/node";
+import { Form, useLoaderData } from "@remix-run/react";
+import { ContactRecord, getContact } from "../data";
+import invariant from "tiny-invariant";
+import { FunctionComponent } from "react";
 
 // 動的ルーティング的な
-
 // rootファイルの命名 https://remix.run/docs/en/main/file-conventions/routes#route-file-naming
 
+// loaderは非同期関数
+export const loader = async ({ params }: LoaderFunctionArgs) => {
+  // 普遍条件を違反した時の処遇 https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Meta_programming#%E4%B8%8D%E5%A4%89%E6%9D%A1%E4%BB%B6_invariant
+  invariant(params.contactId, "Missing contactId param");
+  const contact = await getContact(params.contactId);
+  if (!contact) {
+    throw new Response("Not Found", { status: 404 });
+  }
+  return json({ contact });
+};
+
 export default function Contact() {
-  const contact = {
-    first: "Your",
-    last: "Name",
-    // リモートで繋いでる
-    avatar: "https://placekitten.com/200/200",
-    twitter: "your_handle",
-    notes: "Some notes",
-    favorite: true,
-  };
+  // apiからdata取得
+  const { contact } = useLoaderData<typeof loader>();
+
+  // sample data
+  //   const contact = {
+  //     first: "Your",
+  //     last: "Name",
+  //     // リモートで繋いでる
+  //     avatar: "https://placekitten.com/200/200",
+  //     twitter: "your_handle",
+  //     notes: "Some notes",
+  //     favorite: true,
+  //   };
 
   return (
     <div id="contact">
