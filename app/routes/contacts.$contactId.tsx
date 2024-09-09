@@ -1,4 +1,4 @@
-import { json, LoaderFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, json, LoaderFunctionArgs } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
 import { ContactRecord, getContact } from "../data";
 import invariant from "tiny-invariant";
@@ -17,6 +17,10 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   }
   return json({ contact });
 };
+
+// export const action = async ({ params, request }: ActionFunctionArgs) => {
+//   invariant(params.contactId);
+// };
 
 export default function Contact() {
   // apiからdata取得
@@ -51,7 +55,7 @@ export default function Contact() {
             </>
           ) : (
             <i>No Name</i>
-          )}{" "}
+          )}
           <Favorite contact={contact} />
         </h1>
 

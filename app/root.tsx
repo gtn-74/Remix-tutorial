@@ -10,18 +10,24 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 
-// fromの「?url」がよくわからん 
+// fromの「?url」がよくわからん
 import appStylesHref from "./app.css?url";
-import { getContacts } from "./data";
+import { createEmptyContact, getContacts } from "./data";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: appStylesHref },
 ];
 
-// api
+// loader
 export const loader = async () => {
   const contacts = await getContacts();
   return json({ contacts });
+};
+
+// action
+export const action = async () => {
+  const contact = await createEmptyContact();
+  return json({ contact });
 };
 
 export default function App() {
